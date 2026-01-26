@@ -1,5 +1,7 @@
-# GameMaker Anywhere
 <p align="center">
-  <img src="Github assets/gamemaker_anywhere_logo.png" alt="GameMaker Anywhere logo" width="600" />
+  <img src="Github assets/gamemaker_anywhere_logo.png" alt="GameMaker Anywhere logo" width="300" />
 </p>
-A heavy work in progress port of gamemaker to several consoles (3ds only currently)
+
+## Info
+<p align="left">
+A heavy work in progress port of gamemaker to several consoles (3ds only currently) using devkitpro and C.
