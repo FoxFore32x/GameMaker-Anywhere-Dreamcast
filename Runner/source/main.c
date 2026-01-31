@@ -316,6 +316,7 @@ static void InitCurrentRoom(const char* json_text)
 }
 
 
+
 int main()
 {
 	#pragma region //init stuff
@@ -327,7 +328,6 @@ int main()
 	C2D_Prepare();
 	consoleInit(GFX_BOTTOM, NULL);
 	printf("\x1b[45m");
-
 
 	//load the data.win
 	FILE* datawin = fopen("romfs:/data.win", "rb");
@@ -367,6 +367,15 @@ int main()
 	printf("room width=%.1f\n", GetCurrentRoomSize(data_json, "width"));
 	printf("room height=%.1f\n", GetCurrentRoomSize(data_json, "height"));
 
+	//check current platform
+	#ifdef __3DS__
+		printf("Running on 3DS!!!!\n");
+	#endif
+
+	#ifdef __WIIU__
+		printf("Running on Wii U!!!!!!\n");
+	#endif
+
 	//sily cat :D
 	//draw_sprite(0, spriteSheet, 50, 50);
 	#pragma endregion
@@ -389,8 +398,6 @@ int main()
 		//Quit force quit app
 		if (gamepad_button_check(gp_start))
 			break;
-
-
 
 		#pragma region //draw frames
 		//Start the frame
