@@ -1,5 +1,8 @@
-#include <3ds.h>
-#include <citro2d.h>
+#ifdef __3DS__
+    #include <3ds.h>
+    #include <citro2d.h>
+#endif
+
 #include <assert.h>
 #include <string.h>
 #include <stdio.h>
@@ -319,35 +322,44 @@ int main()
 {
 	#pragma region //init stuff
 	// Init libs
-	gfxInitDefault();
-	romfsInit();
-	C3D_Init(C3D_DEFAULT_CMDBUF_SIZE);
-	C2D_Init(C2D_DEFAULT_MAX_OBJECTS);
-	C2D_Prepare();
-	consoleInit(GFX_BOTTOM, NULL);
+	//3ds
+	char* data_json = "";
+	C3D_RenderTarget* top = NULL;
+
+	if (is_running3DS()){
+		gfxInitDefault();
+		romfsInit();
+		C3D_Init(C3D_DEFAULT_CMDBUF_SIZE);
+		C2D_Init(C2D_DEFAULT_MAX_OBJECTS);
+		C2D_Prepare();
+		consoleInit(GFX_BOTTOM, NULL);
+
+		//load the data.win
+		FILE* datawin = fopen("romfs:/data.win", "rb");
+		fseek(datawin, 0, SEEK_END);
+		long size = ftell(datawin);
+		fseek(datawin, 0, SEEK_SET);
+		data_json = (char*)malloc((size_t)size + 1);
+		fread(data_json, 1, (size_t)size, datawin);
+		data_json[size] = '\0';
+		fclose(datawin);
+
+		// Create screens
+		top = C2D_CreateScreenTarget(GFX_TOP, GFX_LEFT);
+		// Load sprite sheet
+		spriteSheet = C2D_SpriteSheetLoad("romfs:/gfx/sprites.t3x");
+	}
+
+
 	printf("\x1b[45m");
-
-	//load the data.win
-	FILE* datawin = fopen("romfs:/data.win", "rb");
-	fseek(datawin, 0, SEEK_END);
-	long size = ftell(datawin);
-	fseek(datawin, 0, SEEK_SET);
-	char* data_json = (char*)malloc((size_t)size + 1);
-	fread(data_json, 1, (size_t)size, datawin);
-	data_json[size] = '\0';
-	fclose(datawin);
-
 	//set the current room
 	cJSON* first = GetFirstRoomName(data_json);
 	CurrentRoom = strdup(first->valuestring);
 	cJSON_Delete(first);
 
-	// Create screens
-	C3D_RenderTarget* top = C2D_CreateScreenTarget(GFX_TOP, GFX_LEFT);
-	// Load graphics
-	spriteSheet = C2D_SpriteSheetLoad("romfs:/gfx/sprites.t3x");
 	//load the first room
 	InitCurrentRoom(data_json);
+
 	//set room size
 	cam_w = GetCurrentRoomSize(data_json, "width");
 	cam_h = GetCurrentRoomSize(data_json, "height");
@@ -380,7 +392,7 @@ int main()
 
 
 	//"Step" event
-	while (aptMainLoop())
+	while (true)
 	{
 		//scan for inputs
 		hidScanInput();
@@ -403,16 +415,18 @@ int main()
 
 
 	#pragma region //end app
-	//Delete graphics
-	C2D_SpriteSheetFree(spriteSheet);
+	//3ds
+	if (is_running3DS()){
+		C2D_SpriteSheetFree(spriteSheet);
+		C2D_Fini();
+		C3D_Fini();
+		gfxExit();
+		romfsExit();
+		return 0;
+	}
 
-	//Deinit libs
-	C2D_Fini();
-	C3D_Fini();
-	gfxExit();
-	romfsExit();
+
 	free(data_json);
 	cJSON_Delete(root);
-	return 0;
 	#pragma endregion
 }

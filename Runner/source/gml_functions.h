@@ -1,6 +1,9 @@
 #pragma once
-#include <3ds.h>
-#include <citro2d.h>
+#ifdef __3DS__
+    #include <3ds.h>
+    #include <citro2d.h>
+#endif
+
 #include <stdbool.h>
 #include <stddef.h>
 

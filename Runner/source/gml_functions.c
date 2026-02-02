@@ -1,4 +1,8 @@
-#include <citro2d.h>
+#ifdef __3DS__
+    #include <3ds.h>
+    #include <citro2d.h>
+#endif
+
 #include "gml_functions.h"
 #include <stdio.h>
 
