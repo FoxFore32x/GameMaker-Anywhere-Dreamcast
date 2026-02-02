@@ -1,6 +1,8 @@
 cross_platform.o: \
  D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/cross_platform.c \
- D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/cross_platform.h \
+ D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/main.h \
+ D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/cJSON.h \
+ D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/gml_functions.h \
  C:/devkitPro/libctru/include/3ds.h \
  C:/devkitPro/libctru/include/3ds/types.h \
  C:/devkitPro/libctru/include/3ds/result.h \
@@ -111,12 +113,12 @@ cross_platform.o: \
  C:/devkitPro/libctru/include/c2d/sprite.h \
  C:/devkitPro/libctru/include/c2d/text.h \
  C:/devkitPro/libctru/include/c2d/font.h \
+ D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/gml_runner.h \
  D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/shortcut_functions.h \
- D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/main.h \
- D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/cJSON.h \
- D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/gml_functions.h \
- D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/gml_runner.h
-D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/cross_platform.h:
+ D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/cross_platform.h
+D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/main.h:
+D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/cJSON.h:
+D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/gml_functions.h:
 C:/devkitPro/libctru/include/3ds.h:
 C:/devkitPro/libctru/include/3ds/types.h:
 C:/devkitPro/libctru/include/3ds/result.h:
@@ -227,8 +229,6 @@ C:/devkitPro/libctru/include/c2d/spritesheet.h:
 C:/devkitPro/libctru/include/c2d/sprite.h:
 C:/devkitPro/libctru/include/c2d/text.h:
 C:/devkitPro/libctru/include/c2d/font.h:
-D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/shortcut_functions.h:
-D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/main.h:
-D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/cJSON.h:
-D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/gml_functions.h:
 D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/gml_runner.h:
+D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/shortcut_functions.h:
+D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/cross_platform.h:

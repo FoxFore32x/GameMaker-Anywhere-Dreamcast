@@ -32,7 +32,7 @@ static bool sprite_is_object[MAX_SPRITES];
 
 #pragma region //Return values from the data.win
 //get the sprite via its t3s slot
-static int GetSpriteNumberByName(const cJSON* root, const char* sprite_name)
+int GetSpriteNumberByName(const cJSON* root, const char* sprite_name)
 {
 	const cJSON* sprites = cJSON_GetObjectItemCaseSensitive(root, "Sprites");
 	const cJSON* all = cJSON_GetObjectItemCaseSensitive(sprites, "all_sprites");
@@ -66,7 +66,7 @@ static cJSON* GetFirstRoomName(const char* json_text)
 
 #pragma region //Get room info (bg, width, height, ect)
 //return the current rooms background colour
-u32 GetCurrentRoomBgColor(const char* json_text, const char* room_name)
+u32 GetCurrentRoomBgColor_3DS(const char* json_text, const char* room_name)
 {
 
 	u32 out = C2D_Color32f(255.0f, 255.0f, 255.0f, 1.0f);
@@ -191,11 +191,7 @@ static void CreateCurrentRoomAssets(const char* json_text)
 				float float_rot = (float)rot->valuedouble * (float)M_PI / -180;
 
 				//draw the sprite
-				Sprite* sp = &sprites[SpriteCount];
-				C2D_SpriteFromSheet(&sp->spr, spriteSheet, GetSpriteNumberByName(root, spr->valuestring));
-				C2D_SpriteSetPos(&sp->spr, float_x, float_y);
-				C2D_SpriteSetScale(&sp->spr, float_scalex, float_scaley);
-				C2D_SpriteSetRotation(&sp->spr, float_rot);
+				scr_drawroom_assets_3DS(SpriteCount, spriteSheet, float_x, float_y, float_scalex, float_scaley, float_rot, root, spr);
 
 				//set these to not have an object id
 				sprite_is_object[SpriteCount] = false;

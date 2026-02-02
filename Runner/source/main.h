@@ -13,4 +13,5 @@
 #include <stdbool.h>
 
 
-u32 GetCurrentRoomBgColor(const char* json_text, const char* room_name);
+u32 GetCurrentRoomBgColor_3DS(const char* json_text, const char* room_name);
+int GetSpriteNumberByName(const cJSON* root, const char* sprite_name);
