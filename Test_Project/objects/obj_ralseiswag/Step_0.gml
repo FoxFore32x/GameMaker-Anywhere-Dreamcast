@@ -22,3 +22,5 @@ if (gamepad_button_check_pressed(4, gp_select)) {
 if (gamepad_button_check_released(4, gp_select)) {
     y = 300;
 }
+
+room_goto(Room2);

@@ -113,7 +113,8 @@ main.o: D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/main.c \
  D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/gml_functions.h \
  D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/gml_runner.h \
  D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/shortcut_functions.h \
- D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/cross_platform.h
+ D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/cross_platform.h \
+ D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/main.h
 C:/devkitPro/libctru/include/3ds.h:
 C:/devkitPro/libctru/include/3ds/types.h:
 C:/devkitPro/libctru/include/3ds/result.h:
@@ -229,3 +230,4 @@ D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/gml_functions.h:
 D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/gml_runner.h:
 D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/shortcut_functions.h:
 D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/cross_platform.h:
+D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/main.h:

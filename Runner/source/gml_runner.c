@@ -6,14 +6,23 @@
 #include "gml_runner.h"
 #include <stdlib.h>
 #include <stdbool.h>
+#include "main.h"
 static const cJSON* root = NULL;
-
 
 #pragma region //shortcut stuff
 //carry over the root from the main.c (probably better way i could've done this...)
 void GML_SetRoot(const cJSON* garrys_in_the_room_tonight)
 {
 	root = garrys_in_the_room_tonight;
+}
+
+void remove_all_chars(char* str, char c) {
+    char *pr = str, *pw = str;
+    while (*pr) {
+        *pw = *pr++;
+        pw += (*pw != c);
+    }
+    *pw = '\0';
 }
 
 static inline void skip_emptyspace(const char** cursor_butgarryateit)
@@ -340,7 +349,9 @@ static void runner_apply_xy_code(int object_index, const char* code)
 		char axis = *cursor;
 		if (axis != 'x' && axis != 'y')
 		{
-			while (*cursor && *cursor != ';') cursor++;
+			while (*cursor && *cursor != ';')
+				cursor++;
+			
 			if (*cursor == ';')
 				cursor++;
 
@@ -422,6 +433,71 @@ static void runner_apply_xy_code(int object_index, const char* code)
 	C2D_SpriteSetPos(&sprites[object_index].spr, current_x, current_y);
 }
 
+//changes the room (room_goto)
+static void runner_apply_roomgoto_code(int object_index, const char* code)
+{
+	float current_x = sprites[object_index].spr.params.pos.x;
+	float current_y = sprites[object_index].spr.params.pos.y;
+	const char* cursor = code;
+
+	while (cursor && *cursor)
+	{
+		//skip empty space
+		skip_emptyspace(&cursor);
+
+		if (*cursor == '{' || *cursor == '}')
+		{
+			cursor++;
+			continue;
+		}
+
+		if (runner_apply_if_code(&cursor))
+			continue;
+
+
+		//check if this is a room_goto function
+		if (strncmp(cursor, "room_goto", 9) != 0)
+		{
+			while (*cursor && *cursor != ';')
+				cursor++;
+
+			if (*cursor == ';')
+				cursor++;
+
+			continue;
+		}
+		cursor += 9;
+
+
+		//skip empty space
+		skip_emptyspace(&cursor);
+
+		if (*cursor == '(')
+			cursor++;
+
+		const char* RealRoom = cursor;
+		remove_all_chars(RealRoom, ';');
+		remove_all_chars(RealRoom, ')');
+
+		printf("cursor=%s\n", RealRoom);
+
+		CurrentRoom = RealRoom;
+		InitCurrentRoom(data_json);
+
+		if (*cursor == ')')
+			cursor++;
+
+		//continue if at the end of a line
+		if (*cursor == ';')
+			cursor++;
+
+		while (*cursor == '\n' || *cursor == '\r')
+			cursor++;
+	}
+
+	C2D_SpriteSetPos(&sprites[object_index].spr, current_x, current_y);
+}
+
 
 #pragma endregion
 
@@ -447,6 +523,7 @@ void RunGML_create(const char* code, int object_def_index)
 
 		//run the code
 		runner_apply_xy_code(instance_index, code);
+		runner_apply_roomgoto_code(instance_index, code);
 	}
 }
 
@@ -470,6 +547,7 @@ void RunGML_step(const char* code, int object_def_index)
 
 		//run the code
 		runner_apply_xy_code(instance_index, code);
+		runner_apply_roomgoto_code(instance_index, code);
 	}
 
 	for (int i = 0; i < (int)SpriteCount; i++){

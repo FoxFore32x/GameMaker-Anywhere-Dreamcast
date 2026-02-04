@@ -12,10 +12,10 @@
 #include <math.h>
 #include "gml_functions.h"
 #include "gml_runner.h"
-#include "gml_runner.h"
 #include "shortcut_functions.h"
 #include "cross_platform.h"
 #include <stdbool.h>
+#include "main.h"
 
 float cam_x = 0;
 float cam_y = 0;
@@ -29,6 +29,7 @@ C2D_SpriteSheet spriteSheet;
 Sprite sprites[MAX_SPRITES];
 size_t SpriteCount = 0;
 const char* CurrentRoom = "";
+char* data_json = "";
 
 int  sprite_object_id[MAX_SPRITES];
 static bool sprite_is_object[MAX_SPRITES];
@@ -170,6 +171,10 @@ static void CreateCurrentRoomAssets(const char* json_text)
 	
 	cJSON_ArrayForEach(room, all_rooms)
 	{
+		cJSON* roomname = cJSON_GetObjectItemCaseSensitive(room, "name");
+		if (!roomname || strcmp(roomname->valuestring, CurrentRoom) != 0)
+			continue;
+
 		cJSON* layers = cJSON_GetObjectItemCaseSensitive(room, "layers");
 		cJSON_ArrayForEach(layer, layers)
 		{
@@ -309,9 +314,20 @@ static void CreateCurrentRoomObjects(const char* json_text)
 
 #pragma endregion
 
-//Init the current room (create assets, objects, run creation code, ect)
-static void InitCurrentRoom(const char* json_text)
+//Clear objects and assets
+static void Runner_ClearRoomState(void)
 {
+    SpriteCount = 0;
+
+    memset(sprites, 0, sizeof(sprites));
+    memset(sprite_object_id, 0, sizeof(sprite_object_id));
+    memset(sprite_is_object, 0, sizeof(sprite_is_object));
+}
+
+//Init the current room (create assets, objects, run creation code, ect)
+void InitCurrentRoom(const char* json_text)
+{
+	Runner_ClearRoomState();
 	CreateCurrentRoomAssets(json_text);
 	CreateCurrentRoomObjects(json_text);
 }
@@ -323,7 +339,6 @@ int main()
 	#pragma region //init stuff
 	// Init libs
 	//3ds
-	char* data_json = "";
 	C3D_RenderTarget* top = NULL;
 
 	if (is_running3DS()){
@@ -343,7 +358,7 @@ int main()
 		fread(data_json, 1, (size_t)size, datawin);
 		data_json[size] = '\0';
 		fclose(datawin);
-
+		
 		// Create screens
 		top = C2D_CreateScreenTarget(GFX_TOP, GFX_LEFT);
 		// Load sprite sheet
@@ -359,12 +374,13 @@ int main()
 
 	//load the first room
 	InitCurrentRoom(data_json);
-
+	
 	//set room size
 	cam_w = GetCurrentRoomSize(data_json, "width");
 	cam_h = GetCurrentRoomSize(data_json, "height");
 		
 	cJSON* root = cJSON_Parse(data_json);
+	//carry root to gml_runner
 	GML_SetRoot(root);
 
 	#pragma endregion
