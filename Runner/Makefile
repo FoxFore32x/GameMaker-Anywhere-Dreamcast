@@ -4,6 +4,10 @@
 3dsx cia:
 	$(MAKE) -f platform/3ds/Makefile $@
 
+#Dreamcast
+dc:
+	$(MAKE) -f platform/dc/Makefile $@
+
 #Wii U
 wuhb:
 	$(MAKE) -f platform/wiiu/Makefile $@
@@ -14,5 +18,6 @@ nds:
 
 clean:
 	$(MAKE) -f platform/3ds/Makefile clean
+	$(MAKE) -f platform/dc/Makefile clean
 	$(MAKE) -f platform/wiiu/Makefile clean
 	$(MAKE) -f platform/nds/Makefile clean

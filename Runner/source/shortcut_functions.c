@@ -10,6 +10,15 @@ bool is_running3DS()
     #endif
 }
 
+bool is_runningDC()
+{
+    #ifdef __DC__
+        return true;
+    #else
+        return false;
+    #endif
+}
+
 bool is_runningWiiU()
 {
     #ifdef __WIIU__
