@@ -219,7 +219,7 @@ C:/devkitPro/devkitARM/bin/../lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-
 C:/devkitPro/devkitARM/bin/../lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/armv6k/fpu\libc.a(libc_a-calloc.o)
                               C:/devkitPro/libctru/lib\libcitro3d.a(renderqueue.o) (calloc)
 C:/devkitPro/devkitARM/bin/../lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/armv6k/fpu\libc.a(libc_a-puts.o)
-                              gml_functions.o (puts)
+                              main.o (puts)
 C:/devkitPro/devkitARM/bin/../lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/armv6k/fpu\libc.a(libc_a-callocr.o)
                               C:/devkitPro/devkitARM/bin/../lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/armv6k/fpu\libc.a(libc_a-calloc.o) (_calloc_r)
 C:/devkitPro/devkitARM/bin/../lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/armv6k/fpu\libc.a(libc_a-realloc.o)
@@ -607,8 +607,6 @@ Discarded input sections
  .text          0x00000000        0x0 gml_functions.o
  .data          0x00000000        0x0 gml_functions.o
  .bss           0x00000000        0x0 gml_functions.o
- .text.show_debug_message
-                0x00000000        0x4 gml_functions.o
  .text.draw_sprite
                 0x00000000       0xa8 gml_functions.o
  .comment       0x00000000       0x19 gml_functions.o
