@@ -62,19 +62,19 @@ static int input_convertstring(const char* s, const char** out_end)
 		return gp_select; 
 	}
 
-	if (strncmp(s, "gp_padl", 8) == 0){
+	if (strncmp(s, "gp_padl", 7) == 0){
 		return gp_padl; 
 	}
 
-	if (strncmp(s, "gp_padr", 8) == 0){
+	if (strncmp(s, "gp_padr", 7) == 0){
 		return gp_padr; 
 	}
 
-	if (strncmp(s, "gp_padu", 8) == 0){
+	if (strncmp(s, "gp_padu", 7) == 0){
 		return gp_padu; 
 	}
 
-	if (strncmp(s, "gp_padd", 8) == 0){
+	if (strncmp(s, "gp_padd", 7) == 0){
 		return gp_padd; 
 	}
 
@@ -129,9 +129,9 @@ static bool if_gamepad_button_check(const char** p_cursor){
 	{
 		cursor += 20;
 
-		while (*cursor && *cursor != '('){
+		/*while (*cursor && *cursor != '('){
 			cursor++;
-		}
+		}*/
 
 		if (*cursor == '(')
 			cursor++;
@@ -151,9 +151,9 @@ static bool if_gamepad_button_check(const char** p_cursor){
 
 		int button = input_convertstring(cursor, &cursor);
 
-		while (*cursor && *cursor != ')'){
+		/*while (*cursor && *cursor != ')'){
 			cursor++;
-		}
+		}*/
 
 		if (*cursor == ')')
 			cursor++;
@@ -360,6 +360,10 @@ const char* gmVarFuncs[300] = {
 	"player_avatar_url", "player_id"
 };
 
+const char* nums[10] = {
+	"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"
+};
+
 var* createVar(const char* name){
 	var* newVar = (var*)malloc(sizeof(var));
 	newVar->name = strdup(name);
@@ -484,6 +488,8 @@ static void runner_apply_custom_code(var **gmVar, int object_index, const char* 
 {
 	const char* cursor = code;
 
+	char *name;
+
 	while (cursor && *cursor)
 	{
 		//skip empty space
@@ -525,19 +531,16 @@ static void runner_apply_custom_code(var **gmVar, int object_index, const char* 
 
 		const char *nameStart = cursor;
 
-		while (*cursor != ' ' || *cursor != '+' || *cursor != '-' ||
-		*cursor != '*' || *cursor != '/' || *cursor != ';'){
-			cursor++;
-		}
-
 		size_t nameLen = cursor - nameStart;
-		char *name = malloc(nameLen + 1);
+		name = malloc(nameLen + 1);
 		memcpy(name, nameStart, nameLen);
 		name[nameLen] = '\0';
 
 		*gmVar = createVar(name);
 
-		free(name);
+		if (*cursor == '+' || *cursor == '-' || *cursor == '*' || *cursor == '/' || *cursor == ';'){
+			cursor++;
+		}
 
 		runner_keep_applying_var_code(cursor, gmVar);	
 
@@ -549,10 +552,11 @@ static void runner_apply_custom_code(var **gmVar, int object_index, const char* 
 		while (*cursor == '\n' || *cursor == '\r')
 			cursor++;
 	}
+	free(name);
 }
 
 //applys the x and y of the objects
-static void runner_apply_xy_code(int object_index, const char* code)
+static void runner_apply_xy_code(int object_index, const char* code, var **gmVar)
 {
 	float current_x = sprites[object_index].spr.params.pos.x;
 	float current_y = sprites[object_index].spr.params.pos.y;
@@ -621,32 +625,75 @@ static void runner_apply_xy_code(int object_index, const char* code)
 
 		//parse number
 		char* endptr = NULL;
-		float value = (float)strtod(cursor, &endptr);
 
-		if (endptr != cursor)
-		{
-			if (axis == 'x'){
-				if (to_add)
-					current_x += value;
-				else if (to_subtract)
-					current_x -= value;
-				else if (to_multi)
-					current_x *= value;
-				else
-					current_x = value;
-			}
+		if(cursor != nums[0] && cursor != nums[1] && cursor != nums[2] && cursor != nums[3] && cursor != nums[4] && cursor != nums[5] && cursor != nums[6] && cursor != nums[7] && cursor != nums[8] && cursor != nums[9]){
 			
-			if (axis == 'y'){
-				if (to_add)
-					current_y += value;
-				else if (to_subtract)
-					current_y -= value;
-				else if (to_multi)
-					current_y *= value;
-				else
-					current_y = value;
+			const char *nameStart = cursor;
+
+			size_t nameLen = cursor - nameStart;
+			char* name = malloc(nameLen + 1);
+			memcpy(name, nameStart, nameLen);
+			name[nameLen] = '\0';
+
+			while (gmVar && *gmVar && strcmp(name, (*gmVar)->name) != 0){
+				gmVar = &(*gmVar)->next;
 			}
-			cursor = endptr;
+
+			float value = *(float*)(*gmVar)->value;
+
+			if (endptr != cursor)
+			{
+				if (axis == 'x'){
+					if (to_add)
+						current_x += value;
+					else if (to_subtract)
+						current_x -= value;
+					else if (to_multi)
+						current_x *= value;
+					else
+						current_x = value;
+				}
+				
+				if (axis == 'y'){
+					if (to_add)
+						current_y += value;
+					else if (to_subtract)
+						current_y -= value;
+					else if (to_multi)
+						current_y *= value;
+					else
+						current_y = value;
+				}
+				cursor = endptr;
+			}
+		}else {
+			float value = (float)strtod(cursor, &endptr);
+
+			if (endptr != cursor)
+			{
+				if (axis == 'x'){
+					if (to_add)
+						current_x += value;
+					else if (to_subtract)
+						current_x -= value;
+					else if (to_multi)
+						current_x *= value;
+					else
+						current_x = value;
+				}
+				
+				if (axis == 'y'){
+					if (to_add)
+						current_y += value;
+					else if (to_subtract)
+						current_y -= value;
+					else if (to_multi)
+						current_y *= value;
+					else
+						current_y = value;
+				}
+				cursor = endptr;
+			}
 		}
 
 
@@ -737,6 +784,8 @@ void RunGML_create(const char* code, int object_def_index)
 	static bool did_create[MAX_SPRITES] = {0};
 	static int create_cursor = 0;
 
+	var *gmVar = NULL;
+
 	for (int n = 0; n < (int)SpriteCount; n++)
 	{
 		int instance_index = runner_next_object_index(&create_cursor, object_def_index);
@@ -749,8 +798,11 @@ void RunGML_create(const char* code, int object_def_index)
 			continue;
 		did_create[instance_index] = true;
 
+		//
+
 		//run the code
-		runner_apply_xy_code(instance_index, code);
+		runner_apply_xy_code(instance_index, code, &gmVar);
+		runner_apply_custom_code(&gmVar, instance_index, code);
 		runner_apply_roomgoto_code(instance_index, code);
 	}
 }
@@ -760,6 +812,8 @@ void RunGML_step(const char* code, int object_def_index)
 	//Select next object instance
 	static int step_cursor = 0;
 	static bool ran_this_frame[MAX_SPRITES] = {0};
+
+	var *gmVar = NULL;
 
 	for (int n = 0; n < (int)SpriteCount; n++)
 	{
@@ -772,9 +826,11 @@ void RunGML_step(const char* code, int object_def_index)
 
 		ran_this_frame[instance_index] = true;
 
+		//
 
 		//run the code
-		runner_apply_xy_code(instance_index, code);
+		runner_apply_xy_code(instance_index, code, &gmVar);
+		runner_apply_custom_code(&gmVar, instance_index, code);
 		runner_apply_roomgoto_code(instance_index, code);
 	}
 
