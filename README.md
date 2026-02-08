@@ -6,6 +6,12 @@
 <p align="left">
 A work in progress open source port of gamemaker to several consoles (3ds only currently) using devkitpro and C.
 https://discord.gg/cc2YA2pChU
+
+This fork is made for Dreamcast support specifically, while also serving for additions that will later be implemented in the main runner.
+
+If Dreamcast support is completed, and some features end up being added, will see if they can be merged into the main repo.
+
+- FoxFore32x
 </p>
 
 <br>
