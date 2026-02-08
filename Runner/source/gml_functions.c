@@ -32,16 +32,6 @@ bool gamepad_button_check_released(u32 ButtonPressed) {
 }
 #pragma endregion
 
-#pragma region //Debug functions
-
-//quick print to the console
-void show_debug_message(const char* Printor)
-{
-	printf("%s\n", Printor);
-}
-
-#pragma endregion
-
 #pragma region //Drawing functions
 void draw_sprite(int spritenumber, C2D_SpriteSheet sheet, float x, float y) {
 	if (SpriteCount >= MAX_SPRITES)
