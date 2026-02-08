@@ -62,6 +62,22 @@ static int input_convertstring(const char* s, const char** out_end)
 		return gp_select; 
 	}
 
+	if (strncmp(s, "gp_padl", 8) == 0){
+		return gp_padl; 
+	}
+
+	if (strncmp(s, "gp_padr", 8) == 0){
+		return gp_padr; 
+	}
+
+	if (strncmp(s, "gp_padu", 8) == 0){
+		return gp_padu; 
+	}
+
+	if (strncmp(s, "gp_padd", 8) == 0){
+		return gp_padd; 
+	}
+
 	return -4;
 }
 
@@ -323,6 +339,218 @@ static bool runner_apply_if_code(const char** p_cursor){
 #pragma endregion
 
 #pragma region //applying code
+
+const char* gmVarFuncs[300] = {
+	"x", "y", "bbox_bottom", "bbox_left", "bbox_right", "bbox_top",
+	"collision_space", "depth", "direction", "drawn_by_sequence",
+	"event_number", "event_object", "event_type", "friction",
+	"gravity", "gravity_direction", "hspeed", "vspeed", "id",
+	"image_alpha", "image_angle", "image_blend", "image_index",
+	"image_number", "image_speed", "image_xscale", "image_yscale",
+	"in_collision_tree", "in_sequence", "layer", "mask_index",
+	"object_index", "on_ui_layer", "path_endaction", "path_orientation",
+	"path_position", "path_positionprevious", "path_scale", "path_speed",
+	"persistent", "phy_active", "phy_angular_damping", "phy_angular_velocity",
+	"phy_bullet", "phy_col_normal_x", "phy_col_normal_y", "phy_collision_points",
+	"phy_collision_x", "phy_collision_y", "phy_com_x", "phy_com_y", "phy_dynamic",
+	"phy_fixed_rotation", "phy_inertia", "phy_kinematic", "phy_linear_damping",
+	"phy_linear_velocity_x", "phy_linear_velocity_y", "phy_mass", "phy_position_x",
+	"phy_position_xprevious", "phy_position_y", "phy_position_yprevious", "phy_rotation",
+	"phy_sleeping", "phy_speed", "phy_speed_x", "phy_speed_y", "player_avatar_sprite",
+	"player_avatar_url", "player_id"
+};
+
+var* createVar(const char* name){
+	var* newVar = (var*)malloc(sizeof(var));
+	newVar->name = strdup(name);
+	newVar->value = NULL;
+	newVar->next = NULL;
+	return newVar;
+}
+
+static void runner_keep_applying_var_code(const char* code, var **gmVar)
+{
+	const char* cursor = code;
+
+	while (cursor && *cursor)
+	{
+		//skip empty space
+		skip_emptyspace(&cursor);
+
+		if (*cursor == '{' || *cursor == '}')
+		{
+			cursor++;
+			continue;
+		}
+
+		if (runner_apply_if_code(&cursor))
+			continue;
+
+
+		//check if this is a x or y statement
+		if (strncmp(cursor, (*gmVar)->name, strlen((*gmVar)->name)) != 0)
+		{
+			while (*cursor && *cursor != ';')
+				cursor++;
+			
+			if (*cursor == ';')
+				cursor++;
+
+			continue;
+		}
+		cursor++;
+
+		//skip empty space
+		skip_emptyspace(&cursor);
+
+		//check if doing addition, subtraction, set to, ect
+		bool to_add = false;
+		bool to_subtract = false;
+		bool to_multi = false;
+		bool to_div = false;
+		
+		if (*cursor == '+')
+		{
+			cursor++;
+			to_add = true;
+			cursor++;
+		}
+		else if (*cursor == '-')
+		{
+			cursor++;
+			to_subtract = true;
+			cursor++;
+		}		
+		else if (*cursor == '*')
+		{
+			cursor++;
+			to_multi = true;
+			cursor++;
+		}
+		else if (*cursor == '/')
+		{
+			cursor++;
+			to_div = true;
+			cursor++;
+		}
+		else if (*cursor == '=')
+		{
+			cursor++;
+		}
+
+		//parse number
+		char* endptr = NULL;
+		float value = (float)strtod(cursor, &endptr);
+
+		if (endptr != cursor)
+		{
+			if (strncmp(cursor, (*gmVar)->name, strlen((*gmVar)->name)) == 0){
+				if ((*gmVar)->value == NULL) {
+					(*gmVar)->value = malloc(sizeof(float));
+					*(float*)(*gmVar)->value = 0.0f;
+				}
+
+				if (to_add) {
+					*(float*)(*gmVar)->value += value;
+				}
+				else if (to_subtract) {
+					*(float*)(*gmVar)->value -= value;
+				}
+				else if (to_multi) {
+					*(float*)(*gmVar)->value *= value;
+				}
+				else if (to_div) {
+					*(float*)(*gmVar)->value /= value;
+				}
+				else {
+					*(float*)(*gmVar)->value = value;
+				}
+			}
+			cursor = endptr;
+		}
+
+
+		//continue if at the end of a line
+		if (*cursor == ';')
+			cursor++;
+
+		while (*cursor == '\n' || *cursor == '\r')
+			cursor++;
+	}
+}
+
+//applys the x and y of the objects
+static void runner_apply_custom_code(var **gmVar, int object_index, const char* code)
+{
+	const char* cursor = code;
+
+	while (cursor && *cursor)
+	{
+		//skip empty space
+		skip_emptyspace(&cursor);
+
+		if (*cursor == '{' || *cursor == '}')
+		{
+			cursor++;
+			continue;
+		}
+
+		if (runner_apply_if_code(&cursor))
+			continue;
+
+
+		//check if there's a function call that we don't support, if so skip it
+		char axis = *cursor;
+		if (axis == '(')
+		{
+			while (*cursor && *cursor != ';')
+				cursor++;
+			
+			if (*cursor == ';')
+				cursor++;
+
+			continue;
+		}
+
+		for (int i = 0; i < sizeof(gmVarFuncs[i]); i++){
+			if (strncmp(cursor, gmVarFuncs[i], strlen(gmVarFuncs[i])) == 0){
+				cursor += strlen(gmVarFuncs[i]);
+				break;
+			}
+		}
+		cursor++;
+
+		//skip empty space
+		skip_emptyspace(&cursor);
+
+		const char *nameStart = cursor;
+
+		while (*cursor != ' ' || *cursor != '+' || *cursor != '-' ||
+		*cursor != '*' || *cursor != '/' || *cursor != ';'){
+			cursor++;
+		}
+
+		size_t nameLen = cursor - nameStart;
+		char *name = malloc(nameLen + 1);
+		memcpy(name, nameStart, nameLen);
+		name[nameLen] = '\0';
+
+		*gmVar = createVar(name);
+
+		free(name);
+
+		runner_keep_applying_var_code(cursor, gmVar);	
+
+		//continue if at the end of a line
+		if (*cursor == ';'){
+			cursor++;
+		}
+
+		while (*cursor == '\n' || *cursor == '\r')
+			cursor++;
+	}
+}
+
 //applys the x and y of the objects
 static void runner_apply_xy_code(int object_index, const char* code)
 {

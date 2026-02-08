@@ -1,3 +1,4 @@
-cJSON.o: D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/cJSON.c \
- D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/cJSON.h
-D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/cJSON.h:
+cJSON.o: \
+ C:/Users/dgarc/OneDrive/Documentos/GitHub/GameMaker-Anywhere-Dreamcast/Runner/source/cJSON.c \
+ C:/Users/dgarc/OneDrive/Documentos/GitHub/GameMaker-Anywhere-Dreamcast/Runner/source/cJSON.h
+C:/Users/dgarc/OneDrive/Documentos/GitHub/GameMaker-Anywhere-Dreamcast/Runner/source/cJSON.h:

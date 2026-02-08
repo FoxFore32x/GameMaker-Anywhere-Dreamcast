@@ -1,4 +1,5 @@
-main.o: D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/main.c \
+main.o: \
+ C:/Users/dgarc/OneDrive/Documentos/GitHub/GameMaker-Anywhere-Dreamcast/Runner/source/main.c \
  C:/devkitPro/libctru/include/3ds.h \
  C:/devkitPro/libctru/include/3ds/types.h \
  C:/devkitPro/libctru/include/3ds/result.h \
@@ -109,12 +110,12 @@ main.o: D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/main.c \
  C:/devkitPro/libctru/include/c2d/sprite.h \
  C:/devkitPro/libctru/include/c2d/text.h \
  C:/devkitPro/libctru/include/c2d/font.h \
- D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/cJSON.h \
- D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/gml_functions.h \
- D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/gml_runner.h \
- D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/shortcut_functions.h \
- D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/cross_platform.h \
- D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/main.h
+ C:/Users/dgarc/OneDrive/Documentos/GitHub/GameMaker-Anywhere-Dreamcast/Runner/source/cJSON.h \
+ C:/Users/dgarc/OneDrive/Documentos/GitHub/GameMaker-Anywhere-Dreamcast/Runner/source/gml_functions.h \
+ C:/Users/dgarc/OneDrive/Documentos/GitHub/GameMaker-Anywhere-Dreamcast/Runner/source/gml_runner.h \
+ C:/Users/dgarc/OneDrive/Documentos/GitHub/GameMaker-Anywhere-Dreamcast/Runner/source/shortcut_functions.h \
+ C:/Users/dgarc/OneDrive/Documentos/GitHub/GameMaker-Anywhere-Dreamcast/Runner/source/cross_platform.h \
+ C:/Users/dgarc/OneDrive/Documentos/GitHub/GameMaker-Anywhere-Dreamcast/Runner/source/main.h
 C:/devkitPro/libctru/include/3ds.h:
 C:/devkitPro/libctru/include/3ds/types.h:
 C:/devkitPro/libctru/include/3ds/result.h:
@@ -225,9 +226,9 @@ C:/devkitPro/libctru/include/c2d/spritesheet.h:
 C:/devkitPro/libctru/include/c2d/sprite.h:
 C:/devkitPro/libctru/include/c2d/text.h:
 C:/devkitPro/libctru/include/c2d/font.h:
-D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/cJSON.h:
-D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/gml_functions.h:
-D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/gml_runner.h:
-D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/shortcut_functions.h:
-D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/cross_platform.h:
-D:/Projects/GitHub/GameMaker-Anywhere/Runner/source/main.h:
+C:/Users/dgarc/OneDrive/Documentos/GitHub/GameMaker-Anywhere-Dreamcast/Runner/source/cJSON.h:
+C:/Users/dgarc/OneDrive/Documentos/GitHub/GameMaker-Anywhere-Dreamcast/Runner/source/gml_functions.h:
+C:/Users/dgarc/OneDrive/Documentos/GitHub/GameMaker-Anywhere-Dreamcast/Runner/source/gml_runner.h:
+C:/Users/dgarc/OneDrive/Documentos/GitHub/GameMaker-Anywhere-Dreamcast/Runner/source/shortcut_functions.h:
+C:/Users/dgarc/OneDrive/Documentos/GitHub/GameMaker-Anywhere-Dreamcast/Runner/source/cross_platform.h:
+C:/Users/dgarc/OneDrive/Documentos/GitHub/GameMaker-Anywhere-Dreamcast/Runner/source/main.h:

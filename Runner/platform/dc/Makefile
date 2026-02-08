@@ -37,7 +37,7 @@ ROMFS       := romfs
 GFXBUILD    := $(ROMFS)/gfx
 
 
-OBJS = src/*.cpp romdisk.o
+OBJS = source/*.c romdisk.o
 KOS_ROMDISK_DIR = romdisk
 
 #---------------------------------------------------------------------------------
@@ -54,7 +54,7 @@ KOS_CFLAGS += -I${KOS_PORTS}/include/raylib
 CXX = kos-c++
 CC = kos-cc
 
-CFLAGS += -Wall -std=c++14 -D_DEFAULT_SOURCE -Wno-missing-braces
+CFLAGS += -Wall -std=c++14 -D_DEFAULT_SOURCE -Wno-missing-braces -D__DC__
 
 ifneq ($(BUILD),$(notdir $(CURDIR)))
 
